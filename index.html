@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetching API</title>
+    <link rel="stylesheet" href="normalize.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      body {
+        background-color: rgb(114, 93, 140);
+        width: 100vw;
+        height: 100vh;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+      }
+      button {
+        font-size: 25px;
+        height: 3rem;
+        width: 11rem;
+        border: none;
+        border-radius: 5px;
+        background: #20750b;
+        color: white;
+      }
+      #close {
+        font-size: 25px;
+        border: none;
+        border-radius: 5px;
+        background: #fba107;
+        color: white;
+      }
+      button:hover {
+        transition: 0.5s;
+        background: rgb(17, 255, 0);
+      }
+      #close:hover {
+        transition: 0.5s;
+        background: rgb(255, 0, 217);
+      }
+      #close {
+        margin-top: 2rem;
+        display: none;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .card {
+        background-color: rgb(13, 94, 134);
+        margin-bottom: 5px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 21px;
+        height: 7rem;
+        width: 40rem;
+        padding-left: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      You can request<br />
+      To do list data<br />
+      using the button
+    </h1>
+    <button id="open" onclick="request()">Request Data</button>
+    <button id="new" onclick="requestNew()">Request New</button>
+    <div class="container">
+      <div id="result"></div>
+      <button
+        id="close"
+        class="animate__animated animate__bounce"
+        onclick="closeRequest()"
+      >
+        Close Data
+      </button>
+    </div>
+  </body>
+  <script>
+    var h1Text = document.querySelector("h1");
+    var buttonOpen = document.getElementById("open");
+    var buttonClose = document.getElementById("close");
+    function request() {
+      // Hide the button
+      h1Text.style.display = "none";
+      buttonOpen.style.display = "none";
+      buttonClose.style.display = "block";
+      // Fetching the array
+      fetch("https://jsonplaceholder.typicode.com/todos")
+        .then(function (response) {
+          return response.json();
+        })
+        // Displaying the json data into my div
+        .then((response) => {
+          var result = document.getElementById("result");
+          var htmlContent = "";
+
+          // Loop through the first 20 elements of the response array
+          /*for (var i = 0; i < 10 && i < response.length; i++) {
+            var element = response[i];
+            // Append the HTML for each element to the accumulated content
+            htmlContent +=
+              "Id: " +
+              element.id +
+              "  " +
+              "Title: " +
+              element.title +
+              "<br><br>";
+          }*/
+          for (var i = 0; i < 5 && i < response.length; i++) {
+            var element = response[i];
+            // Create a div element with the class "card"
+            var cardDiv = document.createElement("div");
+            cardDiv.classList.add("card");
+
+            // Create the content for the card
+            var cardContent =
+              "Id: " +
+              element.id +
+              "<br><br>" +
+              "  " +
+              "Title: " +
+              element.title +
+              "<br><br>";
+
+            // Set the HTML content of the card
+            cardDiv.innerHTML = cardContent;
+
+            // Append the card to the accumulated content
+            htmlContent += cardDiv.outerHTML;
+          }
+
+          result.innerHTML = htmlContent;
+          console.log(response);
+        });
+    }
+    function closeRequest() {
+      buttonOpen.style.display = "none";
+      buttonClose.style.display = "none";
+      // Reload the page to start over
+      location.reload();
+    }
+  </script>
+  <script src="index.js"></script>
+</html>
